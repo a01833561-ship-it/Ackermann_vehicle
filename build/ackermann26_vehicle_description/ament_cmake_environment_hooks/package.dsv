@@ -1,0 +1,4 @@
+source;share/ackermann26_vehicle_description/local_setup.bash
+source;share/ackermann26_vehicle_description/local_setup.dsv
+source;share/ackermann26_vehicle_description/local_setup.sh
+source;share/ackermann26_vehicle_description/local_setup.zsh
