@@ -1,7 +1,5 @@
 opening rviz -> first go to Workspaces/sm26/src
 
-always compile with
-
 colcon build --symlink-install    
      -> it creates a link to current source file - only if its in a new file/folder so it saves there
 
