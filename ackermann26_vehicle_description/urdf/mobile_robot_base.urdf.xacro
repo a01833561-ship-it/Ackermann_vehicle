@@ -1,0 +1,172 @@
+<?xml version= "1.0"?>
+<!--Main File for Physical structure-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="the_first_vehicle"> <!-- root element-->
+
+    <xacro:property name="wheel_radius" value="0.033"/>
+    <xacro:property name="wheel_width" value="0.022"/>
+    <xacro:property name="wheel_mass"   value="0.025"/>
+    <xacro:property name="pi_half"   value="1.5708"/>
+    <xacro:property name="chassis_length" value="0.256"/>
+    <xacro:property name="chassis_width"  value="0.148"/>
+    <xacro:property name="chassis_height" value="0.022"/>
+    <xacro:property name="chassis_mass"   value="0.5"/>
+
+    <xacro:include filename="common_properties.xacro"/>
+    <xacro:include filename="mobile_robot_gazebo.xacro"/>
+    <xacro:include filename="lidar.xacro"/>
+    <xacro:include filename = "csi_cameras.xacro"/>
+    <xacro:include filename = "rgbd_camera.xacro"/>
+    <xacro:include filename = "imu_sensor.xacro"/>
+
+  
+  <!--Box -->
+    <link name="base_footprint"/>
+    <joint name= "base_joint" type= "fixed">
+        <parent link= "base_footprint"/>
+        <child link= "base_link"/>
+        <origin xyz= "0.0 0.0 ${wheel_radius}" rpy= "0.0 0.0 0.0"/>
+    </joint>
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size= "${chassis_length} ${chassis_width} ${chassis_height}"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0.0 0.0 0.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size= "${chassis_length} ${chassis_width} ${chassis_height}"/>
+             </geometry>                
+        </collision>
+        <xacro:box_inertia m="${chassis_mass}" l="${chassis_length}" w="${chassis_width}" h="${chassis_height}" o_xyz="0.0 0.0 0.0" o_rpy="0.0 0.0 0.0"/>
+    </link>
+
+ <!-- xacro allgemeine Reifen Position u. Verbindung -->
+    <xacro:macro name="wheel_link" params="prefix">
+        <link name="${prefix}_wheel">
+            <visual>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+                </geometry>
+                <material name="red">
+                    <color rgba="1.0 0.0 0.0 1.0"/>
+                </material>
+            </visual>    
+            <collision>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertia m="0.025" r="${wheel_radius}" l="${wheel_width}" o_xyz="0.0 0.0 0.0" o_rpy="0.0 0.0 0.0"/>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="wheel_joint" params="name parent child xyz rpy">
+        <joint name="${name}" type="continuous">
+            <parent link="${parent}"/>
+            <child link="${child}"/>
+            <origin xyz="${xyz}" rpy="${rpy}"/>
+            <axis xyz="0.0 0.0 1.0"/>
+        </joint>
+    </xacro:macro>
+
+<!-- Hinten Links: -0,128 , +0,085 -->
+    <xacro:wheel_link prefix="rear_left"/>
+    <xacro:wheel_joint
+        name="rear_left_wheel_joint"
+        parent="base_link"
+        child="rear_left_wheel"
+        xyz="-${chassis_length / 2} ${chassis_width / 2} 0"
+        rpy="${pi_half} 0.0 0.0"/>
+    
+<!-- Hinten Rechts: -0,128 , -0,085 -->
+    <xacro:wheel_link prefix="rear_right"/>
+    <xacro:wheel_joint
+        name="rear_right_wheel_joint"
+        parent="base_link"
+        child="rear_right_wheel"
+        xyz="-${chassis_length / 2} -${chassis_width / 2} 0"
+        rpy="${pi_half} 0.0 0.0"/>
+    
+<!-- Vorne Rechts: +0,128 , -0,085 -->
+    <xacro:wheel_link prefix="front_right"/>
+    <xacro:wheel_joint
+        name="front_right_wheel_joint"
+        parent="front_right_steering_link"
+        child="front_right_wheel"
+        xyz="0 0 0"
+        rpy="${pi_half} 0.0 0.0"/>
+    <link name="front_right_steering_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.0001" length="${wheel_width}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.0001" length="${wheel_width}"/>
+            </geometry>
+        </collision>
+        <xacro:cylinder_inertia m="0.0001" r="0.0001" l="${wheel_width}" o_xyz="0.0 0.0 0.0" o_rpy="0.0 0.0 0.0"/>
+    </link>
+    <joint name="front_right_steering_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="front_right_steering_link"/>
+        <origin xyz="${chassis_length / 2} -${chassis_width / 2} 0" rpy="0 0 0"/>
+        <limit lower="-0.5236" upper="0.5236" effort="0.0405" velocity="3.125"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    
+<!-- Vorne Links: +0,128 , +0,085 -->
+    <xacro:wheel_link prefix="front_left"/>
+    <xacro:wheel_joint
+        name="front_left_wheel_joint"
+        parent="front_left_steering_link"
+        child="front_left_wheel"
+        xyz="0 0 0"
+        rpy="${pi_half} 0.0 0.0"/>
+
+    <link name="front_left_steering_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.0001" length="${wheel_width}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.0001" length="${wheel_width}"/>
+            </geometry>
+        </collision>
+        <xacro:cylinder_inertia m="0.0001" r="0.0001" l="${wheel_width}" o_xyz="0.0 0.0 0.0" o_rpy="0.0 0.0 0.0"/>
+    </link>
+    <joint name="front_left_steering_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="front_left_steering_link"/>
+        <origin xyz="${chassis_length / 2} ${chassis_width / 2} 0" rpy="0 0 0"/>
+        <limit lower="-0.5236" upper="0.5236" effort="0.0405" velocity="3.125"/>
+        <axis xyz= "0.0 0.0 1.0"/>
+        <mimic joint="front_right_steering_joint" multiplier="1" offset="0"/>
+    </joint>
+    
+<!-- 7 wifi Antenne -->
+<!-- 8 10/100/1000 Base-T Ethernet jack -->
+<!-- 9 Dual HDMI connectors -->
+<!-- 10 XT-60 battery connector -->
+<!-- 11 LiPo battery compartment -->
+<!-- 12 Front bumper -->
+<!-- 13 Rear bumper -->
+<!-- 14 Front headlamps and indicators -->
+<!-- 15 Rear brake lights and indicators -->
+<!-- 16 Expandable I/O -->
+<!-- 17 NVIDIA Jetson TX2 -->
+<!-- 18 Drive motor -->
+<!-- 19 720 count pre-gearing motor encoder -->
+<!-- 20 Steering servo motor -->
+<!-- 21 Speaker -->
+<!-- 22 LCD display -->
+<!-- Magnetometer sensor -->
+<!-- GPS/GNSS sensor -->
+
+</robot>

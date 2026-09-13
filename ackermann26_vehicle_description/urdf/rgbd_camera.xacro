@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- 2 Intel RealSense D435 -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <link name="rgbd_link">
+        <visual>
+            <geometry><box size="0.09 0.025 0.025"/></geometry></visual>
+        <collision><geometry><box size="0.09 0.025 0.025"/></geometry></collision>
+        <xacro:box_inertia m="0.072" l="0.09" w="0.025" h="0.025" o_xyz="0 0 0" o_rpy="0 0 0"/>
+    </link>
+    <joint name="rgbd_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="rgbd_link"/>
+        <origin xyz="0.0822 -0.0001 0.1582" rpy="-1.5708 0 -1.5708"/>
+    </joint>
+
+    <gazebo reference="rgbd_link">
+        <sensor name="rgbd_sensor" type="rgbd_camera">
+            <always_on>true</always_on>
+            <update_rate>30.0</update_rate>
+            <visualize>true</visualize>
+            <topic>rgbd_camera</topic>
+            <camera>
+                <horizontal_fov>1.089</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>8.0</far>
+                </clip>
+            </camera>
+        </sensor>
+    </gazebo>
+
+</robot>

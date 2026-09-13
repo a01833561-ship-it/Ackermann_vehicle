@@ -1,0 +1,88 @@
+<!--  how can I add steering to my model?
+
+To implement steering in ROS 2 and Gazebo for an Ackermann vehicle (car-like steering), you need two things: joint structure in your URDF/Xacro and a ROS 2 control / Gazebo plugin to drive those joints.
+Step 1: Set Up the Steering Joints in URDF/Xacro
+
+Ackermann steering requires dedicated steer kingpin/pivot joints for the front wheels.
+
+Instead of attaching front wheels directly to the chassis, attach them to intermediate steering knuckles using revolute joints that rotate around the Z-axis (yaw).
+
+<Sequence>
+<Step subtitle="URDF / Xacro modification" title="Define Steering Knuckles">
+Create left and right steering knuckles connected to your chassis via revolute joints that pivot around the Z-axis:
+XML
+
+<!-- Left Steering Joint (Pivot around Z-axis) --
+<joint name="fl_steering_joint" type="revolute">
+  <parent link="chassis"/>
+  <child link="fl_steering_link"/>
+  <origin xyz="0.25 0.15 0" rpy="0 0 0"/>
+  <axis xyz="0 0 1"/>
+  <limit lower="-0.6" upper="0.6" effort="10.0" velocity="1.0"/>
+</joint>
+
+<link name="fl_steering_link">
+  <inertial>
+    <mass value="0.1"/>
+    <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+  </inertial>
+</link>
+
+</Step>
+
+<Step title="Attach Front Wheel to Steering Link">
+Attach your front wheel link to the steering link (not the chassis) using a continuous joint around the Y-axis (pitch for rolling):
+XML
+
+<!-- Left Front Wheel (Rolls around Y-axis) --
+<joint name="fl_wheel_joint" type="continuous">
+  <parent link="fl_steering_link"/>
+  <child link="fl_wheel_link"/>
+  <origin xyz="0 0.05 0" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+</Step>
+
+<Step subtitle="Gazebo Sim Integration" title="Add Ackermann Plugin for Gazebo">
+Add the Ackermann Drive plugin inside your Gazebo xacro file (e.g., sensors_gazebo.xacro or mobile_robot_gazebo.xacro). This plugin handles front steering angle calculations automatically.
+XML
+
+<gazebo>
+  <plugin name="gazebo_ros_ackermann_drive" filename="libgazebo_ros_ackermann_drive.so">
+    <ros>
+      <namespace>/</namespace>
+      <remapping>cmd_vel:=cmd_vel</remapping>
+      <remapping>odom:=odom</remapping>
+    </ros>
+
+    <update_rate">100.0</update_rate>
+
+    <!-- Steering Joints --
+    <front_left_joint>fl_wheel_joint</front_left_joint>
+    <front_right_joint>fr_wheel_joint</front_right_joint>
+    <back_left_joint>rl_wheel_joint</back_left_joint>
+    <back_right_joint>rr_wheel_joint</back_right_joint>
+    <front_left_steering_joint>fl_steering_joint</front_left_steering_joint>
+    <front_right_steering_joint>fr_steering_joint</front_right_steering_joint>
+
+    <!-- Vehicle Dimensions --
+    <kingpin_separation>0.3</kingpin_separation>
+    <wheelbase>0.5</wheelbase>
+    <wheel_diameter>0.15</wheel_diameter>
+
+    <!-- Limits --
+    <max_steer>0.6</max_steer>
+    <max_wheel_torque>20</max_wheel_torque>
+    <max_wheel_acceleration>1.0</max_wheel_acceleration>
+  </plugin>
+</gazebo>
+
+</Step>
+</Sequence>
+Step 2: Test Steering Control
+
+After building your workspace (colcon build), launch your robot in Gazebo and drive it using teleop_twist_keyboard or command velocity topics:
+Bash
+
+ros2 run teleop_twist_keyboard teleop_twist_keyboard -->
