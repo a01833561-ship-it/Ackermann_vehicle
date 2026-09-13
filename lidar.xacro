@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- Lidar Sensor Configuration  -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+<!-- Lidar 1 size: 38mm height , 70mm  diameter -->
+    <link name="lidar_link">
+        <visual>
+            <geometry>
+            <cylinder radius="0.035" length="0.028"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0.0 0.0 0.0 1.0"/>
+            </material>
+        </visual>
+        <xacro:cylinder_inertia m="0.0001" r="0.035" l="0.028" o_xyz="0 0 0" o_rpy="0 0 0"/>
+    </link>
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_link"/>
+        <origin xyz="-0.0108 -0.001 0.186" rpy="0 0 ${pi_half}"/>
+        <axis xyz= "0 0 1"/>
+    </joint>
+
+<!--values copied from GitHub-->
+    <gazebo reference="lidar_link">
+        <sensor name="lidar_sensor" type="gpu_lidar">
+            <always_on>true</always_on> <!--Not required : 0 -->
+            <update_rate>15.0</update_rate>
+            <visualize>true</visualize>         
+            <topic>lidar_scan</topic>
+            <lidar> <!-- ray or lightbeam. Laser + measure time for the reflection -->
+                <scan>
+                    <horizontal>
+                        <samples>720</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-3.14159</min_angle>
+                        <max_angle>3.14159</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>20.0</max>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </lidar>
+        </sensor>
+    </gazebo>
+</robot>
+ 
