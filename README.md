@@ -2,8 +2,7 @@
 
 ROS 2 and Gazebo simulation of the Ackermann vehicle, including the vehicle description, sensors, Gazebo simulation, and ROS 2 control interfaces.
 
-## Requirements
-
+##Requirements
 The simulation requires:
 
 - Ubuntu
@@ -13,9 +12,7 @@ The simulation requires:
 - ros_gz_sim
 - xacro
 
----
-
-## Structure
+##Structure
 
 The workspace has the following folder structure:
 
@@ -38,31 +35,31 @@ sm26_ws_new/
 
 ---
 
-## Open a terminal:
+##Open a terminal:
 
 ``` 
-cd ~/Workspaces/sm26_ws_new
+cd Workspaces/sm26_ws_new/
 colcon build --symlink-install
 source install/setup.bash
 ``` 
 ---
 
-## Launch 
+##Launch 
 
 ros2 launch ackermann26_vehicle_gazebo gz_sim_launch.py
 
 
-## Check Topics
+##Check Topics
 
 ros2 topic list
 
-For example to see Lidar output topic:
+For example Lidar output topic:
 ros2 topic echo /scan
 
 
-## Keyboard Control
+##Keyboard Control
 Open a second terminal.
-(Because I didn't manage to implement the keyboard in the general launch file.)
+Because I didn't manage to implement the keyboard in the general launch file.
 
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 Keyboard controls with
