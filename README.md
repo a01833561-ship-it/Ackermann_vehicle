@@ -1,4 +1,4 @@
-# Ackermann Vehicle Simulation
+## Ackermann Vehicle Simulation
 
 ROS 2 and Gazebo simulation of the Ackermann vehicle, including the vehicle description, sensors, Gazebo simulation, and ROS 2 control interfaces.
 
@@ -15,11 +15,11 @@ The simulation requires:
 
 ---
 
-## 1. Workspace Structure
+## Structure
 
 The workspace has the following structure:
 
-```text
+``` 
 sm26_ws_new/
 ├── src/
 │   ├── ackermann26_vehicle_description/
@@ -38,15 +38,21 @@ sm26_ws_new/
 ├── build/
 ├── install/
 
-Open a terminal:
+``` 
 
-```bash
+---
+
+## Open a terminal:
+
+``` 
 cd ~/Workspaces/sm26_ws_new
 source /opt/ros/$ROS_DISTRO/setup.bash
 colcon build --symlink-install
 source install/setup.bash
+``` 
+---
 
-Launch
+## Launch
 
 Run the Gazebo simulation:
 
@@ -56,34 +62,34 @@ Replace <launch_file> with the launch file in:
 
 src/ackermann26_vehicle_gazebo/launch/
 
-Keyboard Control
 
-Open a second terminal:
-
-source /opt/ros/$ROS_DISTRO/setup.bash
-source ~/Workspaces/sm26_ws_new/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-
-Check Topics
+## Check Topics
 
 ros2 topic list
 
-For example:
-
-ros2 topic echo /imu/data
+For example to see Lidar output topic:
 ros2 topic echo /scan
 
-Clean Build
+## General Launch file
 
-If necessary:
+ros2 launch ackermann26_vehicle_gazebo gz_sim_launch.py
 
-cd ~/Workspaces/sm26_ws_new
+## Keyboard Control
+Open a second terminal.
+(Because I didn't manage to implement the keyboard in the general launch file.)
+
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+Keyboard controls with
+U  I  O
+J  K  L
+M  <  >
+
+## End simulation
+Ctrl + C
+
+##Clean Build
+
 rm -rf build install log
 colcon build --symlink-install
 source install/setup.bash
 
-
-└── log/
-
-
-if not possible - copy-paste from GitHub!!
