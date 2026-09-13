@@ -132,3 +132,48 @@ and open the attributes?mean Elements? (blue)
 <always_on>true>/always_on>
 adding ALL THE COMMON AND Specific properties if they are Required:1 
 Also find the one for steering?
+
+
+Required ROS packages installed:
+ros_gz_sim
+ros_gz_bridge
+robot_state_publisher
+joint_state_publisher_gui
+rviz2
+teleop_twist_keyboard
+1. Source ROS and the workspace
+
+2. Build the package
+
+3. Launch the robot model in RViz
+This opens the URDF visualization without Gazebo:
+
+
+The file used for this launch is display.launch.py.
+
+4. Launch the Gazebo simulation
+This starts the simulated vehicle in Gazebo and connects the ROS-Gazebo bridge:
+
+
+The launch entry point is gz_sim_launch.py.
+
+5. Enable keyboard teleoperation
+If you want to drive the robot manually:
+
+
+6. Main robot topics
+The robot publishes and consumes these core ROS topics:
+
+/cmd_vel — command input for steering and motion
+/joint_states — wheel and steering positions
+/tf and /tf_static — robot transforms
+/lidar_scan — LiDAR sensor data
+/imu/data — IMU readings
+/front_camera/image_raw, /right_camera/image_raw, /rear_camera/image_raw, /left_camera/image_raw — camera streams
+/rgbd_camera — RGB-D camera stream
+7. Important model files
+Robot URDF: mobile_robot_base.urdf.xacro
+Gazebo config: mobile_robot_gazebo.xacro
+LiDAR sensor: lidar.xacro
+IMU sensor: imu_sensor.xacro
+Cameras: csi_cameras.xacro
