@@ -46,22 +46,31 @@ source install/setup.bash
 
 ##Launch 
 
+``` 
 ros2 launch ackermann26_vehicle_gazebo gz_sim_launch.py
-
+``` 
+---
 
 ##Check Topics
 
+``` 
 ros2 topic list
+```
 
 For example Lidar output topic:
+``` 
 ros2 topic echo /scan
+```
 
 
 ##Keyboard Control
 Open a second terminal.
 Because I didn't manage to implement the keyboard in the general launch file.
-
+```
+ros2 topic echo /scan
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
 Keyboard controls with
 U  I  O
 J  K  L
