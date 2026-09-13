@@ -72,9 +72,11 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
 Keyboard controls with
-U  I  O
-J  K  L
-M  <  >
+U    I    O
+
+J    K    L
+
+M    <    >
 
 ## End simulation
 Ctrl + C
