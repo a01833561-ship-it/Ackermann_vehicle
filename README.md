@@ -17,7 +17,7 @@ The simulation requires:
 
 ## Structure
 
-The workspace has the following structure:
+The workspace has the following folder structure:
 
 ``` 
 sm26_ws_new/
@@ -29,14 +29,10 @@ sm26_ws_new/
 │   │   └── CMakeLists.txt
 │   │
 │   └── ackermann26_vehicle_gazebo/
+│       ├── config/
 │       ├── launch/
-│       ├── worlds/
-│       ├── models/
 │       ├── package.xml
 │       └── CMakeLists.txt
-│
-├── build/
-├── install/
 
 ``` 
 
@@ -46,21 +42,14 @@ sm26_ws_new/
 
 ``` 
 cd ~/Workspaces/sm26_ws_new
-source /opt/ros/$ROS_DISTRO/setup.bash
 colcon build --symlink-install
 source install/setup.bash
 ``` 
 ---
 
-## Launch
+## Launch 
 
-Run the Gazebo simulation:
-
-ros2 launch ackermann26_vehicle_gazebo <launch_file>.launch.py
-
-Replace <launch_file> with the launch file in:
-
-src/ackermann26_vehicle_gazebo/launch/
+ros2 launch ackermann26_vehicle_gazebo gz_sim_launch.py
 
 
 ## Check Topics
@@ -70,9 +59,6 @@ ros2 topic list
 For example to see Lidar output topic:
 ros2 topic echo /scan
 
-## General Launch file
-
-ros2 launch ackermann26_vehicle_gazebo gz_sim_launch.py
 
 ## Keyboard Control
 Open a second terminal.
