@@ -9,9 +9,9 @@ The simulation requires:
 - Ubuntu
 - ROS 2
 - Gazebo
-- `colcon`
-- `ros_gz_sim`
-- `xacro`
+- colcon
+- ros_gz_sim
+- xacro
 
 ---
 
