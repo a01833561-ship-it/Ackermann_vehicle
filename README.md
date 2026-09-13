@@ -13,13 +13,11 @@ The simulation requires:
 - `ros_gz_sim`
 - `xacro`
 
-Make sure ROS 2 is installed and sourced before building.
-
 ---
 
 ## 1. Workspace Structure
 
-The workspace should have the following structure:
+The workspace has the following structure:
 
 ```text
 sm26_ws_new/
