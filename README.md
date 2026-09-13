@@ -37,6 +37,52 @@ sm26_ws_new/
 │
 ├── build/
 ├── install/
+
+Open a terminal:
+
+```bash
+cd ~/Workspaces/sm26_ws_new
+source /opt/ros/$ROS_DISTRO/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+
+Launch
+
+Run the Gazebo simulation:
+
+ros2 launch ackermann26_vehicle_gazebo <launch_file>.launch.py
+
+Replace <launch_file> with the launch file in:
+
+src/ackermann26_vehicle_gazebo/launch/
+
+Keyboard Control
+
+Open a second terminal:
+
+source /opt/ros/$ROS_DISTRO/setup.bash
+source ~/Workspaces/sm26_ws_new/install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+Check Topics
+
+ros2 topic list
+
+For example:
+
+ros2 topic echo /imu/data
+ros2 topic echo /scan
+
+Clean Build
+
+If necessary:
+
+cd ~/Workspaces/sm26_ws_new
+rm -rf build install log
+colcon build --symlink-install
+source install/setup.bash
+
+
 └── log/
 
 
